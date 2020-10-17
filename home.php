@@ -1,15 +1,54 @@
 <?php
     require_once 'clases/Usuario.php';
+    require_once 'clases/Registro.php';
+    require_once 'clases/ControladorSesion.php';
     session_start();
     if (isset($_SESSION['usuario'])) {
         $usuario = unserialize($_SESSION['usuario']);
         $nomApe = $usuario->getNombreApellido();
         date_default_timezone_set("America/Argentina/Buenos_Aires");
         $fecha = date("Y-m-d");
-    }
-    else {
-        header('Location: index.php');
-    }
+        $nombre_usuario = $usuario->getUsuario();
+        $nombre = $usuario->getNombre();
+        $apellido = $usuario->getApellido();
+        $nacimiento = $usuario->getNacimiento();
+        $estatura = $usuario->getEstatura();
+        $pesoDeseado = $usuario->getPesoDeseado();
+        
+        if (isset($_POST['usuario']) && isset($_POST['clave'])) {
+          $cs = new ControladorSesion();
+          $result = $cs->actualizar($_POST['usuario'], $_POST['clave'], 
+                                $_POST['nombre'], $_POST['apellido'],
+                                $_POST['genero'], $_POST['nacimiento'],
+                                $_POST['estatura'], $_POST['pesodeseado'], $usuario->getId());
+          
+          if($result[0] === true ) {
+              echo '<div id="mensaje" class="alert alert-primary">
+                    <p>'.$result[1].'</p></div>';
+          }
+          else{
+              echo '<div id="mensaje" class="alert alert-primary">
+            <p>'.$result[1].'</p></div>';
+          }
+        }
+        
+    
+         if (isset($_POST['fecha']) && isset($_POST['peso'])) {
+        
+          $cs2 = new ControladorSesion();
+          $result2 = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
+
+          if($result2[0] === true ) {
+            echo '<div id="mensaje" class="alert alert-primary">
+                  <p>'.$result2[1].'</p></div>';
+          }
+          else{
+              echo '<div id="mensaje" class="alert alert-primary">
+            <p>'.$result2[1].'</p></div>';
+          }
+        }
+        var_dump($_POST);
+      }
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +96,7 @@
                 <div class="card text-white bg-info" style="max-width: 100%;">
                     <div class="card-header"><h4>PESO DESEADO</h4></div>
                     <div class="card-body bg-light">
-                        <h1 class="text-success card-title">65kg</h1>
+                        <h1 class="text-success card-title"><?=$pesoDeseado?>kg</h1>
                         <h6 class="text-danger card-subtitle">Te faltan: 4,5kg</h6>
                     </div>
                 </div>       
@@ -94,14 +133,14 @@
                 <td>73kg</td>
                 <td class="text-success">-0,5kg</td>
                 <td>
-
+                
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarregistro">
                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                 <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                 </svg></button>
 
-                <button type="button" class="btn btn-primary"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editarregistro"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                 <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/></svg></button>
 
@@ -197,10 +236,42 @@
                 </button>
               </div>
               <div class="modal-body">
-                  <form action="registrarpeso.php" method="post">
+                  <form action="home.php" method="post">
                       <div class="form-row">
                           <div class="form-group  col-md-6">
                             <label class="font-weight-bold">Fecha Actual</label>
+                            <input name="fecha" type="date" class="form-control" value="<?=$fecha?>" readonly>
+                          </div>
+                          <div class="form-group  col-md-6">
+                            <label class="font-weight-bold">Peso Nuevo (kg)</label>
+                            <input name="peso" type="number" class="form-control" maxlength="4" placeholder="Ej. 65,5" step="0.01" required>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <input type="submit" value="Modificar" class="btn btn-primary">
+                      </div>
+                  </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ventana emergente 'Editar Registro' -->
+        <div class="modal fade" id="editarregistro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Registro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+                <div class="modal-body">
+                  <form action="home.php" method="post">
+                      <div class="form-row">
+                          <div class="form-group  col-md-6">
+                            <label class="font-weight-bold">Fecha de Registro</label>
                             <input name="nacimiento" type="date" class="form-control" value="<?=$fecha?>" disabled = true>
                           </div>
                           <div class="form-group  col-md-6">
@@ -208,12 +279,12 @@
                             <input name="pesodeseado" type="number" class="form-control" maxlength="4" placeholder="Ej. 65,5" step="0.01" required>
                           </div>
                       </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                          <input type="submit" value="Registrar" class="btn btn-primary">
+                      </div>
                   </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <input type="submit" value="Registrar" class="btn btn-primary">
-              </div>
+                </div>
             </div>
           </div>
         </div>
@@ -230,10 +301,10 @@
                 </button>
               </div>
               <div class="modal-body">
-                  <form action="#" method="post">
+                  <form action="home.php" method="post">
                       <div class="form-row">
                             <div class="form-group col-md-6">
-                                <input name="usuario" type="text" class="form-control" placeholder="Usuario" required>
+                                <input name="usuario" type="text" class="form-control" placeholder="Usuario" required value="<?=$nombre_usuario?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <input name="clave" type="password" class="form-control" placeholder="Contraseña" required>
@@ -241,10 +312,10 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <input name="nombre" type="text" class="form-control" placeholder="Nombre" required>
+                                <input name="nombre" type="text" class="form-control" placeholder="Nombre" required value="<?=$nombre?>">
                             </div>
                             <div class="form-group  col-md-6">
-                                <input name="apellido" type="text" class="form-control" placeholder="Apellido" required>
+                                <input name="apellido" type="text" class="form-control" placeholder="Apellido" required value="<?=$apellido?>">
                             </div>
                         </div>
                         <div class="form-row">
@@ -259,22 +330,22 @@
                             </div>
                             <div class="form-group  col-md-3">
                                 <label class="font-weight-bold">Fecha de Nacimiento</label>
-                                <input name="nacimiento" type="date" class="form-control">
+                                <input name="nacimiento" type="date" class="form-control" value="<?=$nacimiento?>">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="font-weight-bold">Estatura (cm)</label>
-                                <input name="estatura" type="number" class="form-control" maxlength="3" placeholder="Ej. 170" required>
+                                <input name="estatura" type="number" class="form-control" maxlength="3" placeholder="Ej. 170" required value="<?=$estatura?>">
                             </div>
                             <div class="form-group  col-md-3">
                                 <label class="font-weight-bold">Peso deseado (kg)</label>
-                                <input name="pesodeseado" type="number" class="form-control" step="0.01" maxlength="4" placeholder="Ej. 65,5" required>
+                                <input name="pesodeseado" type="number" class="form-control" step="0.01" maxlength="4" placeholder="Ej. 65,5" required value="<?=$pesoDeseado?>">
                             </div>
                         </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                      <input type="submit" value="Guardar cambios" class="btn btn-primary">
+                    </div>
                   </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <input type="submit" value="Guardar cambios" class="btn btn-primary">
               </div>
             </div>
           </div>
@@ -306,4 +377,3 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     </body>
 </html>
-

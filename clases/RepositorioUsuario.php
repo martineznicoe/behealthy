@@ -58,7 +58,23 @@ class RepositorioUsuario
         else {
             return false;
         }
- 
     }
-}
-    
+
+    public function actualizarUsuario($u)
+    {   
+        
+        $q = "UPDATE personas SET nombre = ?, apellido = ?, genero =?, nacimiento = ?, estatura = ?, pesodeseado = ?, usuario = ?, clave = ? WHERE idpersona = ?";
+        $query = self::$conexion->prepare($q);
+        $query->bind_param("ssssidssi", $u->getNombre(), $u->getApellido(), $u->getGenero(), 
+                                        $u->getNacimiento(), $u->getEstatura(), $u->getPesoDeseado(),
+                                        $u->getUsuario(), password_hash($clave, PASSWORD_DEFAULT), $u->getId());
+        
+        if ( $query->execute() ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+}   
+?>

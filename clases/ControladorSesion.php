@@ -43,7 +43,7 @@ class ControladorSesion
     {
         $repo = new RepositorioUsuario();
         $usuario = new Usuario($nombre_usuario, $nombre, $apellido, $genero, $nacimiento, $estatura, $pesodeseado, $id);
-        $a = $repo->actualizarUsuario($usuario);
+        $a = $repo->actualizarUsuario($usuario, $clave);
         if ($a === false) {
             return [ false, "Error al actualizar los datos"];
         }
@@ -56,12 +56,13 @@ class ControladorSesion
     {
         $repo = new RepositorioRegistro();
         $registro = new Registro($fecha, $peso, $idpersona);
-        $id = $repo->nuevoRegistro($registro);
-        if ($id === false) {
+        $idregistro = $repo->nuevoRegistro($registro);
+        if ($idregistro === false) {
             return [ false, "Error al crear el registro"];
         }
         else {
             $registro->setId($idregistro);
+            
             return [ true, "Registro creado correctamente" ];
         }
     }

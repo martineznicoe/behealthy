@@ -60,14 +60,26 @@ class RepositorioUsuario
         }
     }
 
-    public function actualizarUsuario($u)
+    public function actualizarUsuario($u, $clave)
     {   
+        /* Se guardan los resultados de los geters en variables para luego ser utilizados en blind_param,
+        en vez de ejecutar los geters directamente en blind_param.
+        De esta manera se soluciona el error "Only variables should be passed by reference" */
+        $nombre = $u->getNombre();
+        $apellido = $u->getApellido();
+        $genero = $u->getGenero();
+        $nacimiento = $u->getNacimiento();
+        $estatura = $u->getEstatura();
+        $pesodeseado = $u->getPesoDeseado();
+        $nombreUsuario = $u->getUsuario();
+        $id = $u->getId();
+        $claveNueva = password_hash($clave, PASSWORD_DEFAULT);
         
         $q = "UPDATE personas SET nombre = ?, apellido = ?, genero =?, nacimiento = ?, estatura = ?, pesodeseado = ?, usuario = ?, clave = ? WHERE idpersona = ?";
         $query = self::$conexion->prepare($q);
-        $query->bind_param("ssssidssi", $u->getNombre(), $u->getApellido(), $u->getGenero(), 
-                                        $u->getNacimiento(), $u->getEstatura(), $u->getPesoDeseado(),
-                                        $u->getUsuario(), password_hash($clave, PASSWORD_DEFAULT), $u->getId());
+        $query->bind_param("ssssidssi", $nombre, $apellido, $genero, 
+                                        $nacimiento, $estatura, $pesodeseado,
+                                        $nombreUsuario, $claveNueva, $id);
         
         if ( $query->execute() ) {
             return true;

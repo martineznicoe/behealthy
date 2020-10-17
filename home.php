@@ -23,12 +23,20 @@
                                 $_POST['estatura'], $_POST['pesodeseado'], $usuario->getId());
           
           if($result[0] === true ) {
-              echo '<div id="mensaje" class="alert alert-primary">
-                    <p>'.$result[1].'</p></div>';
+              echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <p>'.$result[1].'</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>';
           }
           else{
-              echo '<div id="mensaje" class="alert alert-primary">
-            <p>'.$result[1].'</p></div>';
+              echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <p>'.$result[1].'</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>';
           }
         }
         
@@ -39,15 +47,22 @@
           $result2 = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
 
           if($result2[0] === true ) {
-            echo '<div id="mensaje" class="alert alert-primary">
-                  <p>'.$result2[1].'</p></div>';
+            echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
+                  <p>'.$result2[1].'</p>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>';
           }
           else{
-              echo '<div id="mensaje" class="alert alert-primary">
-            <p>'.$result2[1].'</p></div>';
+              echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <p>'.$result2[1].'</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>';
           }
         }
-        var_dump($_POST);
       }
 ?>
 
@@ -118,7 +133,7 @@
 
         <!-- Tabla -->
         <div class="row text-center font-weight-bold" style="margin: 15px 0px;">
-          <table class="table table-sm">
+          <table class="table table-sm text-center">
             <thead>
               <tr class="bg-info text-light">
                 <th scope="col">FECHA</th>
@@ -249,7 +264,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <input type="submit" value="Modificar" class="btn btn-primary">
+                        <input type="submit" value="Registrar" class="btn btn-primary">
                       </div>
                   </form>
               </div>
@@ -257,12 +272,12 @@
           </div>
         </div>
 
-        <!-- Ventana emergente 'Editar Registro' -->
+        <!-- Ventana emergente 'Modificar Registro' -->
         <div class="modal fade" id="editarregistro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Editar Registro</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Modificar Registro</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -281,7 +296,7 @@
                       </div>
                       <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                          <input type="submit" value="Registrar" class="btn btn-primary">
+                          <input type="submit" value="Modificar" class="btn btn-primary">
                       </div>
                   </form>
                 </div>

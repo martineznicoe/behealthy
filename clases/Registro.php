@@ -8,10 +8,10 @@ class Registro
     
     public function __construct($fecha, $peso, $idpersona=null, $idregistro=null)
     {
-        $this->idregistro = $idregistro;
         $this->fecha = $fecha;
         $this->peso = $peso;
         $this->idpersona = $idpersona;
+        $this->idregistro = $idregistro;
     }
 
     public function getId() { return $this->idregistro;}

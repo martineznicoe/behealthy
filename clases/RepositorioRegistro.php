@@ -24,11 +24,18 @@ class RepositorioRegistro
     }
 
     public function nuevoRegistro($r)
-    {
+    {   
+        /* Se guardan los resultados de los geters en variables para luego ser utilizados en blind_param,
+        en vez de ejecutar los geters directamente en blind_param.
+        De esta manera se soluciona el error "Only variables should be passed by reference" */
+        $fecha = $r->getFecha();
+        $peso = $r->getPeso();
+        $idpersona = $r->getIdpersona();
+
         $q = "INSERT INTO registros (fecha, peso, idpersona)"; 
         $q.= "VALUES (?, ?, ?)";
         $query = self::$conexion->prepare($q);
-        $query->bind_param("sdi", $r->getFecha(), $r->getPeso(), $r->getIdpersona());
+        $query->bind_param("sdi", $fecha, $peso, $idpersona);
 
         if ( $query->execute() ) {
             // Retornamos el id del usuario recién insertado.

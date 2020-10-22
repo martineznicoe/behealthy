@@ -14,6 +14,7 @@
         $nacimiento = $usuario->getNacimiento();
         $estatura = $usuario->getEstatura();
         $pesoDeseado = $usuario->getPesoDeseado();
+        $genero = $usuario->getGenero();
         
         if (isset($_POST['usuario']) && isset($_POST['clave'])) {
           $cs = new ControladorSesion();
@@ -337,10 +338,17 @@
                             <div class="form-group col-md-3">
                                 <label class="font-weight-bold">Género</label>
                                 <select name="genero" class="form-control">
-                                    <option selected>Elegir...</option>
-                                    <option value="Femenino">Femenino</option>
-                                    <option value="Masculino">Masculino</option>
-                                    <option value="None">Prefiero no contestar</option>
+                                    <?php 
+                                    $opciones_genero=array('Femenino', 'Masculino', 'Prefiero no contestar');
+                                    foreach($opciones_genero as $valor){
+                                        if ($valor != $genero){
+                                          echo "<option value=".$valor.">".$valor."</option>";
+                                        }
+                                        else{
+                                          echo "<option selected value=".$valor.">".$valor."</option>";
+                                        }
+                                    }
+                                    ?>
                                 </select>
                             </div>
                             <div class="form-group  col-md-3">

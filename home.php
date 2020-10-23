@@ -5,24 +5,22 @@
     session_start();
     if (isset($_SESSION['usuario'])) {
         $usuario = unserialize($_SESSION['usuario']);
-        $nomApe = $usuario->getNombreApellido();
         date_default_timezone_set("America/Argentina/Buenos_Aires");
         $fecha = date("Y-m-d");
-        $nombre_usuario = $usuario->getUsuario();
-        $nombre = $usuario->getNombre();
-        $apellido = $usuario->getApellido();
-        $nacimiento = $usuario->getNacimiento();
-        $estatura = $usuario->getEstatura();
-        $pesoDeseado = $usuario->getPesoDeseado();
-        $genero = $usuario->getGenero();
+        $cs = new ControladorSesion();
+        $tabla = $cs->getRegistros($usuario->getId());
         
+        foreach ($tabla as $valor){
+          echo $valor;
+        }; 
+
         if (isset($_POST['usuario']) && isset($_POST['clave'])) {
           $cs = new ControladorSesion();
           $result = $cs->actualizar($_POST['usuario'], $_POST['clave'], 
                                 $_POST['nombre'], $_POST['apellido'],
                                 $_POST['genero'], $_POST['nacimiento'],
                                 $_POST['estatura'], $_POST['pesodeseado'], $usuario->getId());
-          
+
           if($result[0] === true ) {
               echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
                     <p>'.$result[1].'</p>
@@ -87,7 +85,7 @@
                 <button typy="button" class="btn btn-primary" data-toggle="modal" data-target="#registrarpeso">Registrar Peso </button>
                 <div class="btn-group" role="group">
                       <button id="btnGroupDrop1" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Hola! <b><?=$nomApe?></b>
+                      Hola! <b><?=$usuario->getNombreApellido()?></b>
                       </button>
                       <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modificarperfil">Modificar perfil</a>
@@ -112,7 +110,7 @@
                 <div class="card text-white bg-info" style="max-width: 100%;">
                     <div class="card-header"><h4>PESO DESEADO</h4></div>
                     <div class="card-body bg-light">
-                        <h1 class="text-success card-title"><?=$pesoDeseado?>kg</h1>
+                        <h1 class="text-success card-title"><?=$usuario->getPesoDeseado()?>kg</h1>
                         <h6 class="text-danger card-subtitle">Te faltan: 4,5kg</h6>
                     </div>
                 </div>       
@@ -320,7 +318,7 @@
                   <form action="home.php" method="post">
                       <div class="form-row">
                             <div class="form-group col-md-6">
-                                <input name="usuario" type="text" class="form-control" placeholder="Usuario" required value="<?=$nombre_usuario?>">
+                                <input name="usuario" type="text" class="form-control" placeholder="Usuario" required value="<?=$usuario->getUsuario()?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <input name="clave" type="password" class="form-control" placeholder="Contraseña" required>
@@ -328,10 +326,10 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <input name="nombre" type="text" class="form-control" placeholder="Nombre" required value="<?=$nombre?>">
+                                <input name="nombre" type="text" class="form-control" placeholder="Nombre" required value="<?=$usuario->getNombre()?>">
                             </div>
                             <div class="form-group  col-md-6">
-                                <input name="apellido" type="text" class="form-control" placeholder="Apellido" required value="<?=$apellido?>">
+                                <input name="apellido" type="text" class="form-control" placeholder="Apellido" required value="<?=$usuario->getApellido()?>">
                             </div>
                         </div>
                         <div class="form-row">
@@ -341,7 +339,7 @@
                                     <?php 
                                     $opciones_genero=array('Femenino', 'Masculino', 'Prefiero no contestar');
                                     foreach($opciones_genero as $valor){
-                                        if ($valor != $genero){
+                                        if ($valor != $usuario->getGenero()){
                                           echo "<option value=".$valor.">".$valor."</option>";
                                         }
                                         else{
@@ -353,15 +351,15 @@
                             </div>
                             <div class="form-group  col-md-3">
                                 <label class="font-weight-bold">Fecha de Nacimiento</label>
-                                <input name="nacimiento" type="date" class="form-control" value="<?=$nacimiento?>">
+                                <input name="nacimiento" type="date" class="form-control" value="<?=$usuario->getNacimiento()?>">
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="font-weight-bold">Estatura (cm)</label>
-                                <input name="estatura" type="number" class="form-control" maxlength="3" placeholder="Ej. 170" required value="<?=$estatura?>">
+                                <input name="estatura" type="number" class="form-control" maxlength="3" placeholder="Ej. 170" required value="<?=$usuario->getEstatura()?>">
                             </div>
                             <div class="form-group  col-md-3">
                                 <label class="font-weight-bold">Peso deseado (kg)</label>
-                                <input name="pesodeseado" type="number" class="form-control" step="0.01" maxlength="4" placeholder="Ej. 65,5" required value="<?=$pesoDeseado?>">
+                                <input name="pesodeseado" type="number" class="form-control" step="0.01" maxlength="4" placeholder="Ej. 65,5" required value="<?=$usuario->getPesoDeseado()?>">
                             </div>
                         </div>
                     <div class="modal-footer">

@@ -66,4 +66,19 @@ class ControladorSesion
             return [ true, "Registro creado correctamente" ];
         }
     }
+
+    public function getRegistros($idpersona)
+    {
+        $repo = new RepositorioRegistro();
+        $listaRegistros = $repo->consultaRegistros($idpersona);
+        if ($listaRegistros === false) {
+            return [ false, "Error al cargar registros."];
+        }
+        else {
+            return $listaRegistros;
+        }
+    }
+
+
+
 }

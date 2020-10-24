@@ -7,10 +7,8 @@
     if (isset($_SESSION['usuario'])) {
         $usuario = unserialize($_SESSION['usuario']);
         date_default_timezone_set("America/Argentina/Buenos_Aires");
-        $fecha = date("Y-m-d");
         $cs = new ControladorSesion();
-        $tabla = $cs->getRegistros($usuario->getId());
-        
+                
         /* Verifica que los campos usuario y clave del formulario "Modificar Perfil" esten completados
            y llama a la función actualizar del ControladorSesion para guardar los datos que llegan por POST*/
         if (isset($_POST['usuario']) && isset($_POST['clave'])) {
@@ -41,27 +39,39 @@
         /* Verifica que los campos fecha y peso del formulario Registrar Peso esten completados
            y llama a la función registrar del ControladorSesion para guardar los datos que llegan por POST*/
         if (isset($_POST['fecha']) && isset($_POST['peso'])) {
-        
-          $cs2 = new ControladorSesion();
-          $result2 = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
+          $tabla = $cs->getRegistros($usuario->getId());
+         
+          if ($fecha = date("d-m-Y") != $fechaNueva = date_format(date_create($tabla[0][1]),'d-m-Y')){
 
-          if($result2[0] === true ) {
-            echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
-                  <p>'.$result2[1].'</p>
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  </div>';
-          }
-          else{
-              echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <p>'.$result2[1].'</p>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>';
+              $cs2 = new ControladorSesion();
+              $result2 = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
+
+              if($result2[0] === true ) {
+                echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
+                      <p>'.$result2[1].'</p>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>';
+              }
+              else{
+                  echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <p>'.$result2[1].'</p>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>';
+              }
+          } else{
+                echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <p>Ya existe un peso registrado hoy</p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                </div>';
           }
         }
+        $tabla = $cs->getRegistros($usuario->getId());
       }
 ?>
 
@@ -208,7 +218,6 @@
                       echo '<td>'.$diferencia[$i].' kg</td>';
                       echo '</tr>';
                   }
-                  
                 ?>
             </tbody>
           </table>
@@ -232,7 +241,7 @@
                       <div class="form-row">
                           <div class="form-group  col-md-6">
                             <label class="font-weight-bold">Fecha Actual</label>
-                            <input name="fecha" type="date" class="form-control" value="<?=$fecha?>" readonly>
+                            <input name="fecha" type="date" class="form-control" value="<?=$fecha=date("Y-m-d")?>" readonly>
                           </div>
                           <div class="form-group  col-md-6">
                             <label class="font-weight-bold">Peso Nuevo (kg)</label>

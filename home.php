@@ -40,35 +40,58 @@
            y llama a la función registrar del ControladorSesion para guardar los datos que llegan por POST*/
         if (isset($_POST['fecha']) && isset($_POST['peso'])) {
           $tabla = $cs->getRegistros($usuario->getId());
+
+          if (isset($tabla[0][1])){
          
-          if ($fecha = date("d-m-Y") != $fechaNueva = date_format(date_create($tabla[0][1]),'d-m-Y')){
+              if ($fecha = date("d-m-Y") != $fechaNueva = date_format(date_create($tabla[0][1]),'d-m-Y')){
 
+                  $cs2 = new ControladorSesion();
+                  $result2 = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
+
+                  if($result2[0] === true ) {
+                    echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
+                          <p>'.$result2[1].'</p>
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          </div>';
+                  }
+                  else{
+                      echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <p>'.$result2[1].'</p>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>';
+                  }
+              } else{
+                    echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <p>Ya existe un peso registrado hoy</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>';
+              }
+          }else{
               $cs2 = new ControladorSesion();
-              $result2 = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
+                    $result2 = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
 
-              if($result2[0] === true ) {
-                echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
-                      <p>'.$result2[1].'</p>
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                      </div>';
-              }
-              else{
-                  echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <p>'.$result2[1].'</p>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>';
-              }
-          } else{
-                echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
-                <p>Ya existe un peso registrado hoy</p>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                </div>';
+                    if($result2[0] === true ) {
+                      echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <p>'.$result2[1].'</p>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>';
+                    }
+                    else{
+                        echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+                              <p>'.$result2[1].'</p>
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                              </div>';
+                    }
           }
         }
         $tabla = $cs->getRegistros($usuario->getId());

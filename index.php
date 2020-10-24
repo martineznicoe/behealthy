@@ -13,7 +13,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>BeHealthy</title>
-        <link rel="stylesheet" href="bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
     </head>
     <body class="container text-center" style="width: 25rem; margin-top: 20px;">
 

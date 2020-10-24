@@ -42,6 +42,7 @@ class RepositorioUsuario
         return false;
     }
 
+    /* Se guarda en BBDD en la tabla usuarios, el registro del nuevo usuario creado */
     public function save($u, $clave)
     {
         $q = "INSERT INTO personas (nombre, apellido, genero, nacimiento, estatura, pesodeseado, usuario, clave) ";
@@ -62,7 +63,9 @@ class RepositorioUsuario
 
     public function actualizarUsuario($u, $clave)
     {   
-        /* Se guardan los resultados de los geters en variables para luego ser utilizados en blind_param,
+        /* Se actualizan en BBDD en la tabla usuario los datos de perfil del usuario
+        
+        Se guardan los resultados de los geters en variables para luego ser utilizados en blind_param,
         en vez de ejecutar los geters directamente en blind_param.
         De esta manera se soluciona el error "Only variables should be passed by reference" */
         $nombre = $u->getNombre();

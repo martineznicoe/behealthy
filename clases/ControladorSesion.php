@@ -22,7 +22,9 @@ class ControladorSesion
             return [true, "Usuario autenticado correctamente"];
         }
     }
-
+    
+    /* Se crea un nuevo usuario llamando a la función save
+       del repositoUsuario */
     public function create($nombre_usuario, $clave, $nombre, $apellido, $genero, $nacimiento, $estatura, $pesodeseado)
     {
         $repo = new RepositorioUsuario();
@@ -39,6 +41,8 @@ class ControladorSesion
         }
     }
 
+    /* Se actualizan los datos del perfil del usuario llamando a la función actualizarUsuario
+       del repositoUsuario */
     public function actualizar($nombre_usuario, $clave, $nombre, $apellido, $genero, $nacimiento, $estatura, $pesodeseado, $id)
     {
         $repo = new RepositorioUsuario();
@@ -52,6 +56,8 @@ class ControladorSesion
         }
     }
 
+    /* Se registra un peso nuevo llamando a la función nuevoRegistro
+       del repositoRegistro */
     public function registrar($fecha, $peso, $idpersona)
     {
         $repo = new RepositorioRegistro();
@@ -67,6 +73,8 @@ class ControladorSesion
         }
     }
 
+    /* Se trae la lista de registros de peso y fecha del usuario llamando a la función consultaRegistros
+       del repositorioRegistros */
     public function getRegistros($idpersona)
     {
         $repo = new RepositorioRegistro();

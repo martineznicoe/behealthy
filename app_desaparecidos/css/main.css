@@ -1,0 +1,93 @@
+:root {
+    --colorPrimario: #FF7171;
+    --colorPrimarioHover: #cf6565;
+    --colorLogo: #3282b8;
+    --colorWhatsapp: #00b33f;
+    --colorFacebook: #1773ea;
+    --colorEmail: #e34133;
+    --colorTwitter: #1c9cea;
+}
+
+
+.section-titulo__secundario {
+    color: var(--colorPrimario) !important;
+}
+
+.card-button {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-informacion {
+    border:none;
+    width: 60% !important;
+    cursor: pointer !important;
+}
+
+.btn-informacion, .btn-aportar {
+    background-color: var(--colorPrimario) !important;
+    border-color: var(--colorPrimario) !important;
+}
+
+.btn-informacion:hover, .btn-aportar:hover {
+    background-color: var(--colorPrimarioHover) !important;
+    border-color: var(--colorPrimarioHover) !important;
+    transition: .8s;
+}
+
+.card-imagen img {
+    width: 100%;
+    height: 10%;
+}
+
+.botones-informacion {
+    display:flex;
+    justify-content: space-evenly;
+}
+
+.card-body span {
+    font-weight: bold;
+}
+
+.dropdown-menu a {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.dropdown-menu a:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: .8s;
+}
+
+.compartir-whatsapp {
+    background-color: var(--colorWhatsapp);
+}
+
+.compartir-facebook {
+    background-color: var(--colorFacebook);
+}
+
+.compartir-email {
+    background-color: var(--colorEmail);
+}
+
+.compartir-twitter {
+    background-color: var(--colorTwitter);
+}
+
+
+
+.google-maps {
+    position: relative;
+    padding-bottom: 75%;
+    height: 0;
+    overflow: hidden;
+}
+.google-maps iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100% !important;
+    height: 100% !important;
+}

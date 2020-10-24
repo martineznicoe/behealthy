@@ -46,19 +46,20 @@ class RepositorioRegistro
         }
     }
 
+    /* Consulta a BBDD el historico de registros de peso del usuario en la tabla registros y devuelve resultado*/
     public function consultaRegistros($idUsuario)
     {
         $q = "SELECT * FROM registros ";
-        $q.= "WHERE idpersona = ?";
+        $q.= "WHERE idpersona = ? ORDER BY fecha DESC";
         $query = self::$conexion->prepare($q);
         $query->bind_param("i", $idUsuario);
-
         if ( $query->execute() ) {
-            $query->bind_result($id, $fecha, $peso, $person);
-            if ( $query->fetch() ) {
-                return [$id, $fecha, $peso, $person];
-                }
-            } 
-        return false;
+            $resultado = $query->get_result();
+            $resultado = $resultado->fetch_all();
+            return $resultado;
+        }
+        else {
+            return false;
+        }
     }
 }

@@ -3,12 +3,42 @@
     require_once 'clases/Registro.php';
     require_once 'clases/ControladorSesion.php';
     session_start();
+
     /*Se verifica que la sesion de usuario este iniciado*/
     if (isset($_SESSION['usuario'])) {
         $usuario = unserialize($_SESSION['usuario']);
         date_default_timezone_set("America/Argentina/Buenos_Aires");
         $cs = new ControladorSesion();
-                
+        
+        /* Utilizamos las variables mensaje1 y mensaje2 para achicar codigo dentro de los mensajes 
+          devueltos segun la funcion utilizada por el controlador de sesion*/
+        $mensaje1 = '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
+        <p>'.isset($result[1]).'</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>;';
+        $mensaje2 = '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <p>'.isset($result[1]).'</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>';
+
+        /* Verifica que llega por post el idregistro
+           y llama a la función eliminarRegistro del ControladorSesion para eliminar el registro en BBDD*/
+        if (isset($_POST['idregistro'])){
+          $cs = new ControladorSesion();
+          $result = $cs->eliminarRegistro($_POST['idregistro']);
+
+          if($result[0] === true ) {
+            echo $mensaje1;
+          }
+          else{
+            echo $mensaje2;
+          }
+        }
+               
         /* Verifica que los campos usuario y clave del formulario "Modificar Perfil" esten completados
            y llama a la función actualizar del ControladorSesion para guardar los datos que llegan por POST*/
         if (isset($_POST['usuario']) && isset($_POST['clave'])) {
@@ -19,20 +49,10 @@
                                 $_POST['estatura'], $_POST['pesodeseado'], $usuario->getId());
 
           if($result[0] === true ) {
-              echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
-                    <p>'.$result[1].'</p>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>;';
+              echo $mensaje1;
           }
           else{
-              echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <p>'.$result[1].'</p>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>';
+              echo $mensaje2;
           }
         }
         
@@ -46,23 +66,13 @@
               if ($fecha = date("d-m-Y") != $fechaNueva = date_format(date_create($tabla[0][1]),'d-m-Y')){
 
                   $cs2 = new ControladorSesion();
-                  $result2 = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
+                  $result = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
 
-                  if($result2[0] === true ) {
-                    echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
-                          <p>'.$result2[1].'</p>
-                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                          </div>';
+                  if($result[0] === true ) {
+                    echo $mensaje1;
                   }
                   else{
-                      echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <p>'.$result2[1].'</p>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                            </div>';
+                      echo $mensaje2;
                   }
               } else{
                     echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -74,24 +84,13 @@
               }
           }else{
               $cs2 = new ControladorSesion();
-                    $result2 = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
-
-                    if($result2[0] === true ) {
-                      echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
-                            <p>'.$result2[1].'</p>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                            </div>';
-                    }
-                    else{
-                        echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
-                              <p>'.$result2[1].'</p>
-                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                              </div>';
-                    }
+              $result = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
+              if($result[0] === true ) {
+                  echo $mensaje1;
+                }
+                else{
+                  echo $mensaje2;
+                }
           }
         }
         $tabla = $cs->getRegistros($usuario->getId());
@@ -175,7 +174,7 @@
                 <div class="card text-white bg-info " style="max-width: 100%;">
                     <div class="card-header"><h4>IMC</h4></div>
                     <div class="card-body bg-light">
-                        <h1 class="text-success card-title"><?php
+                        <h1 id="imc" class="card-title"><?php
                         if (isset($tabla[0][2])){
                           echo $imc=round((($tabla[0][2]/($usuario->getEstatura()*$usuario->getEstatura()))*10000),1);
                         } else{
@@ -194,7 +193,7 @@
                           echo "Sin definir";
                         }
                         ?></h6>
-                        <h3 class="text-success card-title"><?php
+                        <h3 id="escala" class="card-title"><?php
                         if (isset($imc)){
                           if ($imc<16) { $escala="DELGADES SEVERA";}
                           if (($imc>=16)&&($imc<17) ){ $escala="DELGADEZ MODERADA";}
@@ -238,7 +237,9 @@
                       echo '<tr>';
                       echo '<td>'.date_format(date_create($tabla[$i][1]), 'd-m-Y').'</td>';
                       echo '<td>'.$tabla[$i][2].' kg</td>';
-                      echo '<td>'.$diferencia[$i].' kg</td>';
+                      echo '<td class="color">'.$diferencia[$i].' kg</td>';
+                      echo '<td><button id="'.$tabla[$i][0].'" class="btn btn-danger btnEliminar" onclick="eliminar(this.id)"><i class="fas fa-trash-alt"></i>
+                      </button> </td>';
                       echo '</tr>';
                   }
                 ?>
@@ -349,9 +350,11 @@
             </div>
           </div>
         </div>
-        <!-- FIN Ventana emergente 'Modificar Perfil' -->                              
+        <!-- FIN Ventana emergente 'Modificar Perfil' -->                         
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
     </body>
 </html>

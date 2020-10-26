@@ -62,4 +62,17 @@ class RepositorioRegistro
             return false;
         }
     }
+
+    public function delRegistro($idRegistro)
+    {
+        $q = "DELETE FROM registros";
+        $q.= "WHERE idregistro = ?";
+        $query = self::$conexion->prepare($q);
+        $query->bind_param("i", $idRegistro);
+        if ( $query->execute() ) {
+            return [ true, "Se eliminó el registro exitosamente."];
+        }else{
+            return false;
+        }
+    }
 }

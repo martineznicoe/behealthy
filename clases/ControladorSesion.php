@@ -87,6 +87,16 @@ class ControladorSesion
         }
     }
 
-
+    public function eliminarRegistro($idRegistro)
+    {
+        $repo = new RepositorioRegistro();
+        $respuesta = $repo->delRegistro($idRegistro);
+        if ($respuesta === false) {
+            return [ false, "Error al eliminar el registro."];
+        }
+        else {
+            return $respuesta;
+        }
+    }
 
 }

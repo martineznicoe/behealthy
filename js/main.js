@@ -43,3 +43,5 @@ function eliminar(id){
     var id = id;
     window.location.href = window.location.href + "?idr=" + id;
 } 
+
+

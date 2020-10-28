@@ -13,7 +13,6 @@
         /* Verifica que llega por post el id del registro a eliminar
            y llama a la función eliminarRegistro del ControladorSesion para eliminar el registro en BBDD*/
         if (isset($_GET['idr'])){
-          /* $idr = $_GET['idr']; */
           $cs = new ControladorSesion();
           $result = $cs->eliminarRegistro(intval($_GET['idr']));
 
@@ -33,6 +32,7 @@
             </button>
             </div>';
           }
+          header("Location: home.php ");
         }
                
         /* Verifica que los campos usuario y clave del formulario "Modificar Perfil" esten completados
@@ -80,7 +80,7 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
-                    </div>';;
+                    </div><script>refresh()</script>';;
                   }
                   else{
                       echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -88,7 +88,7 @@
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
-                      </div>';
+                      </div><script>refresh()</script>';
                   }
               } else{
                     echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">

@@ -10,32 +10,28 @@
         date_default_timezone_set("America/Argentina/Buenos_Aires");
         $cs = new ControladorSesion();
         
-        /* Utilizamos las variables mensaje1 y mensaje2 para achicar codigo dentro de los mensajes 
-          devueltos segun la funcion utilizada por el controlador de sesion*/
-        $mensaje1 = '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
-        <p>'.isset($result[1]).'</p>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        </div>;';
-        $mensaje2 = '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <p>'.isset($result[1]).'</p>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        </div>';
-
-        /* Verifica que llega por post el idregistro
+        /* Verifica que llega por post el id del registro a eliminar
            y llama a la función eliminarRegistro del ControladorSesion para eliminar el registro en BBDD*/
-        if (isset($_POST['idregistro'])){
+        if (isset($_GET['idr'])){
+          /* $idr = $_GET['idr']; */
           $cs = new ControladorSesion();
-          $result = $cs->eliminarRegistro($_POST['idregistro']);
+          $result = $cs->eliminarRegistro(intval($_GET['idr']));
 
           if($result[0] === true ) {
-            echo $mensaje1;
+            echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
+            <p>'.$result[1].'</p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>';;
           }
           else{
-            echo $mensaje2;
+            echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <p>'.$result[1].'</p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>';
           }
         }
                
@@ -49,10 +45,20 @@
                                 $_POST['estatura'], $_POST['pesodeseado'], $usuario->getId());
 
           if($result[0] === true ) {
-              echo $mensaje1;
+              echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
+              <p>'.$result[1].'</p>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              </div>';;
           }
           else{
-              echo $mensaje2;
+              echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+              <p>'.$result[1].'</p>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              </div>';
           }
         }
         
@@ -69,10 +75,20 @@
                   $result = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
 
                   if($result[0] === true ) {
-                    echo $mensaje1;
+                    echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <p>'.$result[1].'</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>';;
                   }
                   else{
-                      echo $mensaje2;
+                      echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+                      <p>'.$result[1].'</p>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>';
                   }
               } else{
                     echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -86,10 +102,20 @@
               $cs2 = new ControladorSesion();
               $result = $cs2->registrar($_POST['fecha'], $_POST['peso'], $usuario->getId());
               if($result[0] === true ) {
-                  echo $mensaje1;
+                  echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
+                  <p>'.$result[1].'</p>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>';;
                 }
                 else{
-                  echo $mensaje2;
+                  echo '<div id="mensaje" class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <p>'.$result[1].'</p>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>';
                 }
           }
         }
@@ -106,6 +132,7 @@
         <title>BeHealthy</title>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" rel="stylesheet">
+        <link rel="icon" href="ima/logo1.png" type="image/png"/>
     </head>
 
     <body class="container text-center ">
@@ -247,8 +274,6 @@
           </table>
         </div>
         <!-- FIN Tabla -->
-
-
 
         <!-- Ventana emergente 'Registrar Peso' -->
         <div class="modal fade" id="registrarpeso" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

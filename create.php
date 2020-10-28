@@ -22,6 +22,7 @@ if (isset($_POST['usuario']) && isset($_POST['clave'])) {
         <meta name="viewport" content="width=device-width">
         <title>BeHealthy</title>
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="icon" href="ima/logo1.png" type="image/png"/>
     </head>
     <body class="container text-center" style="margin-top: 20px;">
         <div class="row text-center">

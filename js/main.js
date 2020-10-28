@@ -37,14 +37,9 @@ else
     txt.classList.add('text-danger');
 }
 
+/* Llega por parametro el id del registro a borrar y lo pasa por GET
+al home para recibirlo PHP */
 function eliminar(id){
-    alert("Hola Estoy Eliminando" + id);
     var id = id;
-
-    $.ajax({
-        type:"POST",
-        url:"home.php",
-        data: {idregistro: id},
-        
-    })
+    window.location.href = window.location.href + "?idr=" + id;
 } 

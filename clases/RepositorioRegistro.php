@@ -63,14 +63,15 @@ class RepositorioRegistro
         }
     }
 
-    public function delRegistro($idRegistro)
+    /* Elimina en BBDD el registro de peso indicado */
+    public function delRegistro($idR)
     {
-        $q = "DELETE FROM registros";
+        $q = "DELETE FROM registros ";
         $q.= "WHERE idregistro = ?";
         $query = self::$conexion->prepare($q);
-        $query->bind_param("i", $idRegistro);
+        $query->bind_param("i", $idR);
         if ( $query->execute() ) {
-            return [ true, "Se eliminó el registro exitosamente."];
+            return true;
         }else{
             return false;
         }

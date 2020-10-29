@@ -43,6 +43,13 @@
                                 $_POST['nombre'], $_POST['apellido'],
                                 $_POST['genero'], $_POST['nacimiento'],
                                 $_POST['estatura'], $_POST['pesodeseado'], $usuario->getId());
+          $usuario->setNombre($_POST['nombre']);
+          $usuario->setApellido($_POST['apellido']);
+          $usuario->setUsuario($_POST['usuario']);
+          $usuario->setGenero($_POST['genero']);
+          $usuario->setNacimiento($_POST['nacimiento']);
+          $usuario->setEstatura($_POST['estatura']);
+          $usuario->setPesoDeseado($_POST['pesodeseado']);
 
           if($result[0] === true ) {
               echo '<div id="mensaje" class="alert alert-success alert-dismissible fade show" role="alert">
